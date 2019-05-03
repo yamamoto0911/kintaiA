@@ -11,7 +11,13 @@
       <%= f.label "パスワード" %>
       <%= f.password_field :password, class: 'form-control' %>
 
-      <%= f.submit "ログインする", class: "btn btn-primary" %>
+      <%= f.label :remember_me, class: "checkbox inline" do %>
+        &emsp;&emsp;<%= f.check_box :remember_me %>
+        <span>パスワードを記憶しますか？</span>
+      <% end %>
+　　　
+　　　<%= f.submit "ログインする", class: "btn btn-primary" %>
+
     <% end %>
 
     <p>ユーザー登録がまだの場合は<%= link_to "こちらから", signup_path %>登録</p>

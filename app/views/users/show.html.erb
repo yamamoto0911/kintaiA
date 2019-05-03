@@ -47,7 +47,14 @@
       <% @dates.each do |day| %>
         <tr>
           <td><%= day.worked_on.to_s(:date) %></td>
-          <td><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
+          <% if day.worked_on.wday == 0 %>
+            <td><font color="Red"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></font></td>
+          <% elsif day.worked_on.wday == 6 %>
+            <td><font color="Blue"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></font></td>
+          <% else %>
+            <td><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
+          <% end %>
+          
           <td><%= day.started_at.to_s(:hour) if day.started_at.present? %></td>
           <td><%= day.started_at.to_s(:min) if day.started_at.present? %></td>
           <td>
