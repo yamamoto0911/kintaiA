@@ -1,10 +1,10 @@
 <% provide(:title, '一覧') %>
 <h1>ユーザ一覧</h1>
-<div class="container pull-right">
+<div class="container search_field">
   <p>ユーザー名検索</p>
   <%= form_tag(users_path, :method => 'get' ) do %>
-    <%= text_field_tag :search %>
-    <%= submit_tag '検索', :name => nil, class: "btn btn-lg btn-primary" %>
+    <%= text_field_tag :search,"", placeholder: 'キーワードを入力...' %>
+    <%= submit_tag '検索', :name => nil, class: "btn btn-sm btn-primary" %>
   <% end %>
 </div>
 
