@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     (@first_day..@last_day).each do |day|
       unless @user.attendances.any? {|attendance| attendance.worked_on == day}
         record = @user.attendances.build(worked_on: day)
-        record.save
+        record.save(validate: false)
       end
     end
     @dates = user_attendances_month_date
