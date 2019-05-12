@@ -1,5 +1,7 @@
 class AttendancesController < ApplicationController
 
+  before_action :ensure_correct_user, only: [:edit]
+
   def create
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find_by(worked_on: Date.today)
@@ -41,5 +43,12 @@ class AttendancesController < ApplicationController
 
       def attendances_params
         params.permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      end
+      
+      def ensure_correct_user
+        if current_user.id != params[:id].to_i
+          flash[:danger] = "そのアクセスはできません。"
+          redirect_to current_user
+        end
       end
 end

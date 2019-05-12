@@ -5,7 +5,7 @@ class Attendance < ApplicationRecord
   validate :finished_at_edit_valid_compare
 
   def finished_at_edit_valid
-    if started_at == nil
+    if started_at.nil?
       errors.add(:finished_at, ": 出社時間が入力されていません。")
     end
   end
