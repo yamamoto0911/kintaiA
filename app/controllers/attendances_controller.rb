@@ -46,7 +46,7 @@ class AttendancesController < ApplicationController
       end
       
       def ensure_correct_user
-        if current_user.id != params[:id].to_i
+        if current_user.id != params[:id].to_i && !current_user.admin?
           flash[:danger] = "そのアクセスはできません。"
           redirect_to current_user
         end
