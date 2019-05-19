@@ -111,6 +111,10 @@ class UsersController < ApplicationController
       redirect_to(root_url) unless current_user.admin?
     end
     
+    def superior_user
+      redirect_to(root_url) unless current_user.superior?
+    end
+    
     def ensure_correct_user
       if current_user.id != params[:id].to_i && !current_user.admin?
         flash[:danger] = "そのアクセスはできません。"
