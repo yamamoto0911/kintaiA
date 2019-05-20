@@ -4,6 +4,46 @@
   <% if current_user.admin? && !current_user?(user) %>
     ｜<%= link_to "削除", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
     <br>
-    <%= link_to "基本情報編集", basic_info_path(user), class: "btn btn-primary" %>
+    <div class = "panel panel-default">
+      <div class = "panel-heading">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#<%= user.id %>">編集</button>
+      </div>
+      <div id = "<%= user.id %>" class="collapse panel-collapse">
+        <div class = "panel-body">
+          <%= form_for(user) do |f| %>
+            <%#  <%= render 'shared/error_messages', object: @user エラーメッセージ直す   %>
+            <%= f.label "名前" %>
+            <%= f.text_field :name, class: 'form-control' %>
+    
+            <%= f.label "メールアドレス" %>
+            <%= f.email_field :email, class: 'form-control' %>
+    
+            <%= f.label "所属" %>
+            <%= f.text_field :department, class: 'form-control' %>
+    
+            <%= f.label "パスワード" %>
+            <%= f.password_field :password, class: 'form-control' %>
+    
+            <%= f.label "社員番号" %>
+            <%= f.password_field :code, class: 'form-control' %>
+             
+            <%= f.label "カードＩＤ" %>
+            <%= f.password_field :uid, class: 'form-control' %>
+      
+            <%= f.label "基本勤務時間" %>
+            <%= f.time_field :basic_time, class: 'form-control' %>
+    
+            <%= f.label "指定勤務開始時間" %>
+            <%= f.time_field :basic_start_time, class: 'form-control' %>
+            
+            <%= f.label "指定勤務終了時間" %>
+            <%= f.time_field :basic_finish_time, class: 'form-control' %>
+    
+            <%#  編集するボタンのリファクタリング　およびリンク先をindexにする　%>
+            <%= f.submit "編集する" , class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   <% end %>
 </li>

@@ -4,7 +4,6 @@
 <% else %>
   <h1>ユーザ一覧</h1>
 <% end %>
-
 <div class="container search_field">
   <p>ユーザー名検索</p>
   <%= form_tag(users_path, :method => 'get' ) do %>
@@ -12,10 +11,6 @@
     <%= submit_tag '検索', :name => nil, class: "btn btn-sm btn-primary" %>
   <% end %>
 </div>
-
-
-
-
 
 <%= will_paginate @users, :previous_label => '&lt 前へ', :next_label => '次へ &gt' %>
 

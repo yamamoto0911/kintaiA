@@ -15,6 +15,7 @@ gem 'turbolinks',   '5.0.1'
 gem 'jbuilder',     '2.7.0'
 gem 'rails-i18n',   '~> 5.1'
 gem 'rounding'
+gem 'activerecord-import'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
