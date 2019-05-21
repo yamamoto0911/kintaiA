@@ -16,6 +16,7 @@ gem 'jbuilder',     '2.7.0'
 gem 'rails-i18n',   '~> 5.1'
 gem 'rounding'
 gem 'activerecord-import'
+gem 'roo'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

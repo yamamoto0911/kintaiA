@@ -1,18 +1,12 @@
 <% provide(:title, '一覧') %>
-<% if params[:search].present? %>
-  <h1>検索結果</h1>
-<% else %>
-  <h1>ユーザ一覧</h1>
-<% end %>
-<div class="container search_field">
-  <p>ユーザー名検索</p>
-  <%= form_tag(users_path, :method => 'get' ) do %>
-    <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力...' %>
-    <%= submit_tag '検索', :name => nil, class: "btn btn-sm btn-primary" %>
-  <% end %>
-</div>
+<h1>ユーザ一覧</h1>
 
 <%= will_paginate @users, :previous_label => '&lt 前へ', :next_label => '次へ &gt' %>
+
+<%= form_tag import_users_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "インポート" %>
+<% end %>
 
 <ul class="users">
   <%= render @users %>
