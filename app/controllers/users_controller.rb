@@ -21,7 +21,10 @@ class UsersController < ApplicationController
       flash[:success] = "CSVファイルをインポートしました。"
       redirect_to users_url
     end
-      
+    #rescue ActiveRecord::RecordInvalid
+      #flash[:danger] = "データに不備があります。"
+      #redirect_to users_url
+    
   end
 
   def show

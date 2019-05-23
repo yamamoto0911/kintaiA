@@ -17,7 +17,7 @@ User.create!(name:  "上司２",
              superior: true)
              
 
-59.times do |n|
+4.times do |n|
   name  = Faker::Name.name
   email = "email#{n+1}@sample.com"
   password = "password"
