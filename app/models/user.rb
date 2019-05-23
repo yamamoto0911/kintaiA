@@ -31,7 +31,7 @@ class User < ApplicationRecord
 
   # 更新を許可するカラムを定義
   def self.updatable_attributes
-    ["id", "name", "email", "password"]
+    ["name", "email", "department", "code", "uid", "basic_time", "basic_start_time", "basic_finish_time", "superior", "admin", "password"]
   end
   
   
