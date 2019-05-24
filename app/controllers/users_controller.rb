@@ -97,6 +97,11 @@ class UsersController < ApplicationController
       render 'edit_basic_info'
     end
   end
+  
+  def attendance_users
+    @users = User.all.includes(:attendances)
+    #attendance.where.not(started_at: nil).where(finished_at: nil)
+  end
 
   private
 

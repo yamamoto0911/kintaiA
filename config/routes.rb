@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   patch 'update-basic-info', to: 'users#update_basic_info'
   get 'users/:id/attendances/:date/edit', to:'attendances#edit', as: :edit_attendances
   patch 'users/:id/attendances/:date/update', to: 'attendances#update', as: :update_attendances
+  get '/attendance-users', to: 'users#attendance_users', as: :attendance_users
   resources :users do
     resources :attendances, only: :create
     collection { post :import }
