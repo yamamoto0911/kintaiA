@@ -21,9 +21,9 @@ class UsersController < ApplicationController
       flash[:success] = "CSVファイルをインポートしました。"
       redirect_to users_url
     end
-    #rescue ActiveRecord::RecordInvalid
-      #flash[:danger] = "データに不備があります。"
-      #redirect_to users_url
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "データに不備があります。"
+      redirect_to users_url
     
   end
 
@@ -72,6 +72,7 @@ class UsersController < ApplicationController
   end
   
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
@@ -107,7 +108,7 @@ class UsersController < ApplicationController
     end
   
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :code)
+      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :basic_time, :work_time, :code, :basic_start_time, :basic_finish_time, :uid )
     end
 
     # beforeアクション
@@ -124,7 +125,7 @@ class UsersController < ApplicationController
     # 正しいユーザーかどうか確認
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      redirect_to(root_url) unless current_user?(@user) || current_user.admin?
     end
     
     def admin_user

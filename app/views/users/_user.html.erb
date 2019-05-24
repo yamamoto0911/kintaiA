@@ -11,7 +11,6 @@
       <div id = "<%= user.id %>" class="collapse panel-collapse">
         <div class = "panel-body">
           <%= form_for(user) do |f| %>
-            <%#  <%= render 'shared/error_messages', object: @user エラーメッセージ直す   %>
             <%= f.label "名前" %>
             <%= f.text_field :name, class: 'form-control' %>
     
@@ -25,10 +24,10 @@
             <%= f.password_field :password, class: 'form-control' %>
     
             <%= f.label "社員番号" %>
-            <%= f.password_field :code, class: 'form-control' %>
+            <%= f.text_field :code, class: 'form-control' %>
              
             <%= f.label "カードＩＤ" %>
-            <%= f.password_field :uid, class: 'form-control' %>
+            <%= f.text_field :uid, class: 'form-control' %>
       
             <%= f.label "基本勤務時間" %>
             <%= f.time_field :basic_time, class: 'form-control' %>
@@ -39,7 +38,6 @@
             <%= f.label "指定勤務終了時間" %>
             <%= f.time_field :basic_finish_time, class: 'form-control' %>
     
-            <%#  編集するボタンのリファクタリング　およびリンク先をindexにする　%>
             <%= f.submit "編集する" , class: "btn btn-primary" %>
           <% end %>
         </div>
