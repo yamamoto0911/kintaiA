@@ -13,14 +13,9 @@
         <th>勤怠種類</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-    　　<td></td>
-    　　<td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      <tr>
-    </tbody>
   </table>
 </div>
+<div class = "container">
+  <%= link_to "拠点情報追加", new_basis_path, remote: true, class: "btn btn-primary" %>
+  <div class="modal fade" id="base-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+

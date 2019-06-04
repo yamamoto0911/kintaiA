@@ -26,3 +26,4 @@ User.create!(name:  "上司２",
                password:              password,
                password_confirmation: password)
 end
+
