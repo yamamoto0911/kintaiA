@@ -27,3 +27,10 @@ User.create!(name:  "上司２",
                password_confirmation: password)
 end
 
+Base.create!(name: "東京",
+             number: 1,
+             type: "営業" )
+
+Base.create!(name: "大阪",
+             number: 2,
+             type: "営業" )
