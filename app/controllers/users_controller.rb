@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     end
     @dates = user_attendances_month_date
     @worked_sum = @dates.where.not(started_at: nil).count
-    @user.code = @user.id
+    @user.employee_number = @user.id
     respond_to do |format|
       format.html do
       end 
@@ -106,11 +106,11 @@ class UsersController < ApplicationController
   private
 
     def basic_info_params
-      params.require(:user).permit(:basic_time, :work_time)
+      params.require(:user).permit(:basic_work_time, :work_time)
     end
   
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation, :basic_time, :work_time, :code, :basic_start_time, :basic_finish_time, :uid )
+      params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation, :basic_work_time, :work_time, :employee_number, :designated_work_start_time, :designated_work_end_time, :uid )
     end
 
     # beforeアクション
