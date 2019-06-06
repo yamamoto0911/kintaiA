@@ -1,4 +1,5 @@
 class BasesController < ApplicationController
+before_action :admin_user, only: :destroy
 
   def index
     @bases = Base.all
@@ -28,10 +29,20 @@ class BasesController < ApplicationController
     end
   end
   
+  def destroy
+    Base.find(params[:id]).destroy
+    flash[:success] = "拠点を削除しました。"
+    redirect_to bases_url
+  end
+  
   
     private
 
     def base_params
       params.require(:base).permit(:name, :type, :number)
+    end
+    
+    def admin_user
+      redirect_to bases_url unless current_user.admin?
     end
 end

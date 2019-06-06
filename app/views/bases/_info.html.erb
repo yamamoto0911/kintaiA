@@ -1,0 +1,13 @@
+<tr>
+  <td><%= link_to "編集", root_path, class: "btn btn-primary" %></td>
+  <td><%= link_to "削除", object, method: :delete,
+          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
+  <td><%= object.name %></td>
+  <td><%= object.number %></td>
+  <td><%= object.type %></td>
+</tr>
+
+
+<% # link_to 'Show', object %>
+<% # link_to 'Edit', edit_product_path(object) %>
+<% # link_to 'Destroy', object, method: :delete, data: { confrim: 'Are you sure?' } %>

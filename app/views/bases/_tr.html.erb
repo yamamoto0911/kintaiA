@@ -1,13 +1,1 @@
-<div class = "container">
-  <table class = "table-bordered table-striped table-condensed">
-    <tbody>
-      <tr>
-        <td colspan="5"><%= link_to "編集", root_path, class: "btn btn-primary" %></td>
-        <td colspan="1"><%= link_to "削除", root_path, class: "btn btn-primary" %></td>
-        <td colspan="1"><%= base.name %></td>
-        <td colspan="1"><%= base.number %></td>
-        <td colspan="1"><%= base.type %></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<%= render 'info', object: base %>

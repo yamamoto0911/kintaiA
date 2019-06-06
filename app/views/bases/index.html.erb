@@ -15,13 +15,7 @@
     </thead>
     <tbody>
       <% @bases.each do |base| %>
-        <tr>
-          <td><%= link_to "編集", root_path, class: "btn btn-primary" %></td>
-          <td><%= link_to "削除", root_path, class: "btn btn-primary" %></td>
-          <td><%= base.name %></td>
-          <td><%= base.number %></td>
-          <td><%= base.type %></td>
-        </tr>
+        <%= render 'info', object: base %>
       <% end %>
     </tbody>
   </table>
