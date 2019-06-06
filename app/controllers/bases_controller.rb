@@ -29,6 +29,20 @@ before_action :admin_user, only: :destroy
     end
   end
   
+  def edit_base_info
+    @base = Base.find(params[:id])
+  end
+
+  def update_base_info
+    @base = Base.find(params[:id])
+    if @base.update_attributes(base_params)
+      flash[:success] = "拠点情報を更新しました。"
+    else
+      flash[:danger] = "拠点の更新に失敗しました。" 
+    end
+    redirect_to bases_url
+  end
+  
   def destroy
     Base.find(params[:id]).destroy
     flash[:success] = "拠点を削除しました。"

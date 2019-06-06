@@ -1,5 +1,6 @@
 <tr>
-  <td><%= link_to "編集", root_path, class: "btn btn-primary" %></td>
+  <td><%= link_to "編集", edit_base_info_basis_path(object), remote: true, class: "btn btn-primary" %></td>
+  <div id="edit-base-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
   <td><%= link_to "削除", object, method: :delete,
           data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
   <td><%= object.name %></td>
@@ -8,6 +9,3 @@
 </tr>
 
 
-<% # link_to 'Show', object %>
-<% # link_to 'Edit', edit_product_path(object) %>
-<% # link_to 'Destroy', object, method: :delete, data: { confrim: 'Are you sure?' } %>
