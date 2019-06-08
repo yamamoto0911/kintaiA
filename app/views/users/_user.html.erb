@@ -1,8 +1,10 @@
 <li>
   <%= user.name %>
   <br>
-  <% if current_user.admin? && !current_user?(user) %>
+  <% if current_user.admin? %>
+    <% if !current_user?(user) %>
     ｜<%= link_to "削除", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+    <% end %>
     <br>
     <div class = "panel panel-default">
       <div class = "panel-heading">
