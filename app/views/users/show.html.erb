@@ -68,7 +68,8 @@
     <tbody>
       <% @dates.each do |day| %>
         <tr>
-          <td><%= link_to "残業申請", root_path, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
+          <div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
           <td><%= day.worked_on.to_s(:date) %></td>
           <% if day.worked_on.wday == 0 %>
             <td><font color="Red"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></font></td>
