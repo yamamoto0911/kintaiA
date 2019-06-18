@@ -29,7 +29,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @attendance = Attendance.find(params[:id])
     @first_day = first_day(params[:first_day])
     @last_day = @first_day.end_of_month
     (@first_day..@last_day).each do |day|

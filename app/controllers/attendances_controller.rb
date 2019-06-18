@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
 
-  before_action :ensure_correct_user, only: [:edit]
+  #before_action :ensure_correct_user, only: [:edit]
 
   def create
     @user = User.find(params[:user_id])
@@ -41,17 +41,31 @@ class AttendancesController < ApplicationController
   
   def edit_overwork_request
     @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
+    @attendance = @user.attendances.find(params[:id])
   end
   
   def update_overwork_request
+    @user = current_user
+    @attendance = @user.attendances.find(params[:id])
+    if @attendance.update_attributes(overwork_params)
+      flash[:success] = "残業申請しました。"
+      redirect_to user_url(@user, params:{first_day: params[:date]})
+    else
+      render '@user'
+    end  
   end
+
   
     private
 
       def attendances_params
         params.permit(attendances: [:started_at, :finished_at, :note])[:attendances]
       end
+      
+      def overwork_params
+        params.require(:attendance).permit(:overwork_time, :overwork_note)
+      end
+      
       
       def ensure_correct_user
         if current_user.id != params[:id].to_i && !current_user.admin?
