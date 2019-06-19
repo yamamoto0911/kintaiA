@@ -13,8 +13,17 @@ module AttendancesHelper
     format("%.2f", (((finished_at - started_at) /60) / 60.0))      
   end
   
+  
   def working_times_sum(seconds)
     format("%.2f", seconds / 60 / 60.0)
+  end
+  
+  def overwork_times(designated_work_end_time, overwork_time)
+    if format_basic_work_time(overwork_time).to_f > 12
+      format("%.2f", (format_basic_work_time(overwork_time).to_f - format_basic_work_time(designated_work_end_time).to_f ))
+    else
+      format("%.2f", (format_basic_work_time(overwork_time).to_f + 24 - format_basic_work_time(designated_work_end_time).to_f ))
+    end
   end
   
   def first_day(date)

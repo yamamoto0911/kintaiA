@@ -23,7 +23,7 @@
                 <td><%= @attendance.worked_on.to_s(:date) %></td>
                 <td><%= %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday] %></td>
                 <td><%= f.time_field :overwork_time, class: 'form-control' %></td>
-                <td><%= f.check_box :overwork_note %></td>
+                <td><%= f.check_box :tomorrow ,{}, "true", "false" %></td>
                 <td><%= f.text_field :overwork_note, class: 'form-control' %></td>
                 <td></td>
               </tr>

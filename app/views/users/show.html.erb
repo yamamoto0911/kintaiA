@@ -101,9 +101,9 @@
             <% end %>
           </td>
           <td><%= day.note %></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= day.overwork_time.to_s(:hour) if day.overwork_time.present? %></td>
+          <td><%= day.overwork_time.to_s(:min) if day.overwork_time.present? %></td>
+          <td><%= overwork_times(@user.designated_work_end_time, day.overwork_time) if day.overwork_time.present? %></td>
           <td><%= day.overwork_note %></td>
           <td></td>
         </tr>
