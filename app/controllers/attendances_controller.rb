@@ -63,7 +63,7 @@ class AttendancesController < ApplicationController
       end
       
       def overwork_params
-        params.require(:attendance).permit(:overwork_time, :overwork_note)
+        params.require(:attendance).permit(:overwork_time, :overwork_note, :overwork_tomorrow, :overwork_superior_id)
       end
       
       
