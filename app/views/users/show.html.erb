@@ -105,7 +105,8 @@
           <td><%= day.overwork_time.to_s(:min) if day.overwork_time.present? %></td>
           <td><%= overwork_times(@user.designated_work_end_time, day.overwork_time) if day.overwork_time.present? %></td>
           <td><%= day.overwork_note %></td>
-          <td><%= User.find_by(id: day.overwork_superior_id).name + "に残業申請中" if day.overwork_superior_id.present? %></td>
+          <td><%= User.find_by(id: day.overwork_superior_id).name + "に残業申請中" if day.overwork_superior_id.present? %><br>
+              <%= User.find_by(id: day.change_superior_id).name + "に勤怠編集申請中" if day.change_superior_id.present?  %></td>
         </tr>
       <% end %>
     </tbody>

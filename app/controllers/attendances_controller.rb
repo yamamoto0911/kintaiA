@@ -59,7 +59,7 @@ class AttendancesController < ApplicationController
     private
 
       def attendances_params
-        params.permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+        params.permit(attendances: [:started_at, :finished_at, :note, :change_tomorrow, :change_superior_id])[:attendances]
       end
       
       def overwork_params
