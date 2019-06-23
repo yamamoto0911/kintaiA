@@ -54,9 +54,25 @@ class AttendancesController < ApplicationController
       render '@user'
     end  
   end
+  
+  def update_month_request
+    @user = current_user
+    @attendance = @user.attendances.find(params[:id])
+    if @attendance.update_attributes(month_request_params)
+      flash[:success] = "残業申請しました。"
+      redirect_to current_user
+    else
+      render '@user'
+    end  
+  end
 
   
     private
+    
+      def month_request_params
+        params.require(:attendance).permit(:month_superior_id)
+      end
+      
 
       def attendances_params
         params.permit(attendances: [:started_at, :finished_at, :note, :change_tomorrow, :change_superior_id])[:attendances]

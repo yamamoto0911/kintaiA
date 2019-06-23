@@ -24,11 +24,15 @@
       <td>締日 <%= @last_day.to_s(:date) %></td>
     </tr>
   </table>
-  <div class="superior-informaiton">
-    <p>【残業申請のお知らせ】</p>
-    <p>【所属長承認申請のお知らせ】</p>
-    <p>【残業申請のお知らせ】</p>
-  </div>
+  <% if current_user.superior? || current_user.admin?  %>
+    <div class="superior-informaiton">
+      <p>【残業申請のお知らせ】</p>
+      <p>【所属長承認申請のお知らせ】</p>
+      <p>【残業申請のお知らせ】</p>
+    </div>
+  <% else %>
+    <br><br>
+  <% end %>
   <div class = "show-btn">
     <%= link_to "勤怠編集", edit_attendances_path(@user, @first_day), class: "btn btn-primary" %>
     <%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary" %>
@@ -117,7 +121,13 @@
         <td colspan = "7"></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td colspan = "5"></td>
-        <td><%= link_to "申請", root_path, class: "btn btn-primary" %></td>
+        <td>
+          <%= form_with(model: @attendance, url: update_month_request_user_attendance_path(@user, @dates.first), method: :patch) do |f| %>
+          所属長承認　未
+          <br><%= f.collection_select :month_superior_id, User.where(superior: true), :id, :name, :include_blank => true %><br>
+          <%= f.submit "更新", class: "btn btn-primary" %>
+          <% end %>
+        </td>
       </tr>
     </tfoot>
   </table>
