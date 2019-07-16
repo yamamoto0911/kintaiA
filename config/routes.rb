@@ -17,6 +17,10 @@ Rails.application.routes.draw do
     end
   end
   resources :users do
+    member do
+      get 'edit_overwork_request_approval'
+      patch 'update_overwork_request_approval'
+    end
     resources :attendances do
       member do
         get 'edit_overwork_request'

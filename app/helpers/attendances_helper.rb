@@ -18,8 +18,8 @@ module AttendancesHelper
     format("%.2f", seconds / 60 / 60.0)
   end
   
-  def overwork_times(designated_work_end_time, overwork_time)
-    if format_basic_work_time(overwork_time).to_f > 12
+  def overwork_times(designated_work_end_time, overwork_time, overwork_tomorrow)
+    if overwork_tomorrow == false;
       format("%.2f", (format_basic_work_time(overwork_time).to_f - format_basic_work_time(designated_work_end_time).to_f ))
     else
       format("%.2f", (format_basic_work_time(overwork_time).to_f + 24 - format_basic_work_time(designated_work_end_time).to_f ))

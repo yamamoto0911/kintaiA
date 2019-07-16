@@ -29,7 +29,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @attendance = @user.attendances.find(params[:id])
     @first_day = first_day(params[:first_day])
     @last_day = @first_day.end_of_month
     (@first_day..@last_day).each do |day|
@@ -104,7 +103,15 @@ class UsersController < ApplicationController
     @users = User.all.includes(:attendances)
     #attendance.where.not(started_at: nil).where(finished_at: nil)
   end
-
+  
+  def edit_overwork_request_approval
+    @attendances = Attendance.where(overwork_superior_id: current_user.id)
+    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id})
+  end
+  
+  def update_overwork_request_approval
+  end
+  
   private
 
     def basic_info_params

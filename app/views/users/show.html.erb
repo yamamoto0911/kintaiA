@@ -26,9 +26,10 @@
   </table>
   <% if current_user.superior? || current_user.admin?  %>
     <div class="superior-informaiton">
-      <p>【残業申請のお知らせ】</p>
       <p>【所属長承認申請のお知らせ】</p>
-      <p>【残業申請のお知らせ】</p>
+      <p>【勤怠変更申請のお知らせ】</p>
+      <p>【残業申請のお知らせ】<%= link_to "通知があります", edit_overwork_request_approval_user_path, remote: true %></p>
+      <div id="edit_overwork_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     </div>
   <% else %>
     <br><br>
@@ -107,7 +108,7 @@
           <td><%= day.note %></td>
           <td><%= day.overwork_time.to_s(:hour) if day.overwork_time.present? %></td>
           <td><%= day.overwork_time.to_s(:min) if day.overwork_time.present? %></td>
-          <td><%= overwork_times(@user.designated_work_end_time, day.overwork_time) if day.overwork_time.present? %></td>
+          <td><%= overwork_times(@user.designated_work_end_time, day.overwork_time, day.overwork_tomorrow) if day.overwork_time.present? %></td>
           <td><%= day.overwork_note %></td>
           <td><%= User.find_by(id: day.overwork_superior_id).name + "に残業申請中" if day.overwork_superior_id.present? %><br>
               <%= User.find_by(id: day.change_superior_id).name + "に勤怠編集申請中" if day.change_superior_id.present?  %></td>
@@ -122,7 +123,7 @@
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td colspan = "5"></td>
         <td>
-          <%= form_with(model: @attendance, url: update_month_request_user_attendance_path(@user, @dates.first), method: :patch) do |f| %>
+          <%= form_with(model: @dates.first, url: update_month_request_user_attendance_path(@user, @dates.first), method: :patch) do |f| %>
           所属長承認　未
           <br><%= f.collection_select :month_superior_id, User.where(superior: true), :id, :name, :include_blank => true %><br>
           <%= f.submit "更新", class: "btn btn-primary" %>

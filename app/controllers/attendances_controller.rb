@@ -59,7 +59,7 @@ class AttendancesController < ApplicationController
     @user = current_user
     @attendance = @user.attendances.find(params[:id])
     if @attendance.update_attributes(month_request_params)
-      flash[:success] = "残業申請しました。"
+      flash[:success] = "一ヶ月分の勤怠を申請しました。"
       redirect_to current_user
     else
       render '@user'
