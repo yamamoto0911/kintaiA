@@ -4,7 +4,7 @@ require 'date'
 CSV.generate do |csv|
   csv_column_names = %w(日付 出社 退社 備考 残業終了予定時間 業務内容)
   csv << csv_column_names
-  @user.attendances.each do |attendance|
+  @user.attendances.where(worked_on: @first_day..@last_day).each do |attendance|
     if attendance.started_at.present? || attendance.finished_at.present?
       column_values = [
         attendance.worked_on.to_s(:date),
