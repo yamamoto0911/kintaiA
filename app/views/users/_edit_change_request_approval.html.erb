@@ -5,21 +5,36 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button><br><br>
-          <%= form_with(model: @users, url: update_overwork_request_approval_user_url, method: :patch) do |f| %>
+          <%= form_with(model: @users, url: update_change_request_approval_user_url, method: :patch) do |f| %>
             <% @users.each do |user| %>
-              <h4 class="modal-title" id="exampleModalLabel" align="center">【<%= user.name %>からの残業申請】</h4><br>
+              <h4 class="modal-title" id="exampleModalLabel" align="center">【<%= user.name %>からの勤怠変更申請】</h4><br>
               <table class = "table-bordered table-condensed">
                 <thead>
                   <tr>
-                    <th>日付</th>
-                    <th>曜日</th>
-                    <th>終了予定時間</th>
-                    <th>指定勤務終了時間</th>
-                    <th>時間外時間</th>
-                    <th>業務処理内容</th>
-                    <th>指示者確認㊞</th>
-                    <th>変更</th>
-                    <th>勤怠を確認する</th>
+                    <th rowspan = "3">日付</th>
+                    <th rowspan = "3">曜日</th>
+                    <th colspan = "4">変更前</th>
+                    <th colspan = "4">変更後</th>
+                    <th rowspan = "3">備考</th>
+                    <th rowspan = "3">指示者確認㊞</th>
+                    <th rowspan = "3">変更</th>
+                    <th rowspan = "3">勤怠を確認する</th>
+                  </tr>
+                  <tr>
+                    <th colspan = "2">出社</th>
+                    <th colspan = "2">退社</th>
+                    <th colspan = "2">出社</th>
+                    <th colspan = "2">退社</th>
+                  </tr>
+                  <tr>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
+                    <th>時</th>
+                    <th>分</th>
                   </tr>
                 </thead>
                 <tbody> 
@@ -33,6 +48,11 @@
                           <td><%= format_basic_work_time(user.designated_work_end_time) %></td>
                           <td><%= overwork_times(user.designated_work_end_time, at.overwork_time, at.overwork_tomorrow) if at.overwork_time.present? %></td>
                           <td><%= at.overwork_note %></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td><%= at.note %></td>
                           <td><%= af.select :overwork_enum, Attendance.overwork_enums.keys, { include_blank: true } %></td>
                           <td><%= af.check_box :overwork_request_change ,{}, "true", "false" %></td>
                           <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>

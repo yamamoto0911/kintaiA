@@ -27,7 +27,8 @@
   <% if current_user.superior? || current_user.admin?  %>
     <div class="superior-informaiton">
       <p>【所属長承認申請のお知らせ】</p>
-      <p>【勤怠変更申請のお知らせ】</p>
+      <p>【勤怠変更申請のお知らせ】<%= link_to "通知があります", edit_change_request_approval_user_path, remote: true %></p>
+      <div id="edit_change_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
       <p>【残業申請のお知らせ】<%= link_to "通知があります", edit_overwork_request_approval_user_path, remote: true %></p>
       <div id="edit_overwork_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     </div>
@@ -35,7 +36,7 @@
     <br><br>
   <% end %>
   <div class = "show-btn">
-    <%= link_to "勤怠編集", edit_attendances_path(@user, @first_day), class: "btn btn-primary" %>
+    <%= link_to "勤怠を編集", edit_attendances_path(@user, @first_day), class: "btn btn-primary" %>
     <%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary" %>
     <%= link_to "勤怠修正ログ（承認済）", root_path, class: "btn btn-primary" %>
   </div>
@@ -73,7 +74,7 @@
     <tbody>
       <% @dates.each do |day| %>
         <tr>
-          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day, params:{date: @first_day}), remote: true, class: "btn btn-primary" %></td>
           <div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
           <td><%= day.worked_on.to_s(:date) %></td>
           <% if day.worked_on.wday == 0 %>
@@ -123,10 +124,14 @@
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td colspan = "5"></td>
         <td>
-          <%= form_with(model: @dates.first, url: update_month_request_user_attendance_path(@user, @dates.first), method: :patch) do |f| %>
+          <%= form_with(model: @dates.first, url: update_month_request_user_attendance_path(@user, @dates.first, params:{date: @first_day}), method: :patch) do |f| %>
+          <% if @dates.first.month_superior_id == nil%>
           所属長承認　未
-          <br><%= f.collection_select :month_superior_id, User.where(superior: true), :id, :name, :include_blank => true %><br>
-          <%= f.submit "更新", class: "btn btn-primary" %>
+          <% else %>
+          <%= User.find(@dates.first.month_superior_id).name %>に承認申請中
+          <% end %>
+          <br><%= f.collection_select :month_superior_id, User.where(["admin = ? or superior = ?", true, true]), :id, :name, :include_blank => true, selected: :include_blank %><br>
+          <%= f.submit "申請", class: "btn btn-primary" %>
           <% end %>
         </td>
       </tr>

@@ -79,9 +79,10 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to users_url
     else
-      render 'edit'
+      flash[:danger] = "ユーザー情報の更新に失敗しました。"
+      redirect_to users_url
     end
   end
   
@@ -101,19 +102,34 @@ class UsersController < ApplicationController
   
   def attendance_users
     @users = User.all.includes(:attendances)
-    #attendance.where.not(started_at: nil).where(finished_at: nil)
   end
   
   def edit_overwork_request_approval
     @attendances = Attendance.where(overwork_superior_id: current_user.id)
     @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id})
+    @user = User.find(params[:id])
   end
   
   def update_overwork_request_approval
   end
   
+  def edit_change_request_approval
+    @attendances = Attendance.where(change_superior_id: current_user.id)
+    @users = User.joins(:attendances).group(:name).where(attendances: {change_superior_id: current_user.id})
+    @user = User.find(params[:id])
+  end
+  
+  def update_change_request_approval
+  end
+  
+  
+  
   private
-
+    
+    def overwork_approval_params
+      params.require(:attendances).permit()
+    end
+    
     def basic_info_params
       params.require(:user).permit(:basic_work_time, :work_time)
     end

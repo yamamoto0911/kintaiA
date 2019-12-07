@@ -16,17 +16,12 @@ before_action :admin_user, only: :destroy
   
   def create
     @base = Base.new(base_params)
-    respond_to do |format|
-      if @base.save
-        format.html { redirect_to @base, notice: '拠点が追加されました。' }
-        format.json { render :show, status: :created, location: @base }
-        format.js { @status = "success"}
-      else
-        format.html { render :new }
-        format.json { render json: @base.errors, status: :unprocessable_entity }
-        format.js { @status = "fail" }
-      end
+    if @base.save
+      flash[:success] = "拠点が追加されました。"
+    else
+      flash[:danger] = "拠点の追加に失敗しました。" 
     end
+    redirect_to bases_url
   end
   
   def edit_base_info

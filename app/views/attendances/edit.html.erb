@@ -39,16 +39,24 @@
               <td><%= af.text_field :note, class: "form-control", :readonly => true %></td>
               <td></td>
             <% else %>
-              <td><%= af.time_field :started_at, class: "form-control" %></td>
-              <td><%= af.time_field :finished_at, class: "form-control" %></td>
+              <% if day.started_at != nil %>
+                <td><%= af.time_field :after_started_at, :value => day.started_at.floor_to(15.minutes).to_s(:time), class: "form-control" %></td>
+              <% else %>
+                <td><%= af.time_field :after_started_at, class: "form-control" %></td>
+              <% end %>
+              <% if day.finished_at != nil %>
+                <td><%= af.time_field :after_finished_at, :value => day.finished_at.floor_to(15.minutes).to_s(:time), class: "form-control" %></td>
+              <% else %>
+                <td><%= af.time_field :after_finished_at, class: "form-control" %></td>
+              <% end %>
               <td><%= af.check_box :change_tomorrow ,{}, "true", "false" %></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
-                  <%= working_times(day.started_at, day.finished_at) %>
+                  <%= working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
                 <% end %>  
               </td>
               <td><%= af.text_field :note, class: "form-control" %></td>
-              <td><%= af.collection_select :change_superior_id, User.where(superior: true), :id, :name, :include_blank => true %></td>
+              <td><%= af.collection_select :change_superior_id, User.where(["admin = ? or superior = ?", true, true]), :id, :name, :include_blank => true, selected: :include_blank %></td>
             <% end %>
           </tr>
         <% end %>

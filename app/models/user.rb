@@ -8,8 +8,11 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  validates :affiliation, length: { in: 3..50 }, allow_blank: true
+  validates :password, presence: true, length: { minimum: 1 }, allow_nil: true
+  validates :affiliation, length: { in: 1..50 }, allow_blank: true
+  validates :basic_work_time, presence: true
+  validates :designated_work_start_time, presence: true
+  validates :designated_work_end_time, presence: true
   
   def self.search(search) #ここでのself.はUser.を意味する
     if search
