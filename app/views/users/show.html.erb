@@ -3,11 +3,15 @@
   <table class="table-bordered table-condensed">
     <tr>
       <td>
-        <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),
-        class: "btn btn-xs btn-primary" %>
+        <% if @current_user == @user %>
+          <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),
+          class: "btn btn-xs btn-primary" %>
+        <% end %>
         &emsp;<%= @first_day.to_s(:year_month) %>　時間管理表&emsp;
-        <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
-        class: "btn btn-xs btn-primary" %>        
+        <% if @current_user == @user %>
+          <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
+          class: "btn btn-xs btn-primary" %>
+        <% end %>
       </td>
       <td>指定勤務開始時間 <%= format_basic_work_time(@user.designated_work_start_time) %>
       <br>指定勤務終了時間 <%= format_basic_work_time(@user.designated_work_end_time) %></td>
@@ -24,22 +28,45 @@
       <td>締日 <%= @last_day.to_s(:date) %></td>
     </tr>
   </table>
-  <% if current_user.superior? || current_user.admin?  %>
-    <div class="superior-informaiton">
-      <p>【所属長承認申請のお知らせ】</p>
-      <p>【勤怠変更申請のお知らせ】<%= link_to "通知があります", edit_change_request_approval_user_path, remote: true %></p>
-      <div id="edit_change_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-      <p>【残業申請のお知らせ】<%= link_to "通知があります", edit_overwork_request_approval_user_path, remote: true %></p>
-      <div id="edit_overwork_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-    </div>
-  <% else %>
-    <br><br>
+  <% if @current_user == @user %>
+    <% if current_user.superior? || current_user.admin?  %>
+      <div class="superior-informaiton">
+        <p>【所属長承認申請のお知らせ】</p>
+        <p>
+          <% if @change_approval_number > 0 %>
+            <font color="red">【勤怠変更申請のお知らせ】</font>
+          <% else %>
+            【勤怠変更申請のお知らせ】
+          <% end %>
+          <% if @change_approval_number > 0 %>
+            <%= link_to @change_approval_number.to_s + "件の通知があります", edit_change_request_approval_user_path(params:{date: @first_day}), remote: true, :style=>"color:red; border: 4px solid red;" %>
+          <% end %>
+        </p>
+        <div id="edit_change_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+        <p>
+          <% if @over_approval_number > 0 %>
+            <font color="red">【残業申請のお知らせ】</font>
+          <% else %>
+          【残業申請のお知らせ】
+          <% end %>
+          <% if @over_approval_number > 0 %>
+            <%= link_to @over_approval_number.to_s + "件の通知があります", edit_overwork_request_approval_user_path(params:{date: @first_day}), remote: true, :style=>"color:red; border: 4px solid red;"%>
+          <% end %>
+        </p>
+        <div id="edit_overwork_request_approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+      </div>
+    <% else %>
+      <br><br>
+    <% end %>
   <% end %>
-  <div class = "show-btn">
-    <%= link_to "勤怠を編集", edit_attendances_path(@user, @first_day), class: "btn btn-primary" %>
-    <%= link_to "CSV出力", user_path(format: :csv, params: {id: @user.id, first_day: @first_day}), class: "btn btn-primary" %>
-    <%= link_to "勤怠修正ログ（承認済）", root_path, class: "btn btn-primary" %>
-  </div>
+  <% if @current_user == @user %>
+    <div class = "show-btn">
+      <%= link_to "勤怠を編集", edit_attendances_path(@user, @first_day), class: "btn btn-primary" %>
+      <%= link_to "CSV出力", user_path(format: :csv, params: {id: @user.id, first_day: @first_day}), class: "btn btn-primary" %>
+      <%= link_to "勤怠修正ログ（承認済）", root_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  <br />
   <table class = "table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -74,7 +101,11 @@
     <tbody>
       <% @dates.each do |day| %>
         <tr>
-          <td><%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day, params:{date: @first_day}), remote: true, class: "btn btn-primary" %></td>
+          
+          <td>
+            <% if @current_user == @user %>
+              <%= link_to "残業申請", edit_overwork_request_user_attendance_path(@user, day, params:{date: @first_day}), remote: true, class: "btn btn-primary" %></td>
+            <% end %>
           <div id="edit_overwork_request" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
           <td><%= day.worked_on.to_s(:date) %></td>
           <% if day.worked_on.wday == 0 %>
@@ -89,14 +120,18 @@
           <td><%= day.started_at.floor_to(15.minutes).to_s(:min) if day.started_at.present? %></td>
           <td>
             <% if day.worked_on == Date.today && day.started_at.nil? %>
-              <%= button_to "出社", user_attendances_path(@user), class: "btn btn-xs btn-primary"%>
+              <% if @current_user == @user %>
+                <%= button_to "出社", user_attendances_path(@user), class: "btn btn-xs btn-primary"%>
+              <% end %>
             <% end %>
           </td>
           <td><%= day.finished_at.to_s(:hour) if day.finished_at.present? %></td>
           <td><%= day.finished_at.floor_to(15.minutes).to_s(:min) if day.finished_at.present? %></td>
           <td>
             <% if day.worked_on == Date.today && day.started_at.present? && day.finished_at.nil? %>
-              <%= button_to "退社", user_attendances_path(@user), class: "btn btn-xs btn-primary"%>
+              <% if @current_user == @user %>
+                <%= button_to "退社", user_attendances_path(@user), class: "btn btn-xs btn-primary"%>
+              <% end %>
             <% end %>
           </td>
           <td>
@@ -111,7 +146,16 @@
           <td><%= day.overwork_time.to_s(:min) if day.overwork_time.present? %></td>
           <td><%= overwork_times(@user.designated_work_end_time, day.overwork_time, day.overwork_tomorrow) if day.overwork_time.present? %></td>
           <td><%= day.overwork_note %></td>
-          <td><%= User.find_by(id: day.overwork_superior_id).name + "に残業申請中" if day.overwork_superior_id.present? %><br>
+          <td>
+              <% if day.overwork_superior_id.present? %>
+                <% if day.overwork_enum == '申請中' %>
+                  <%= User.find_by(id: day.overwork_superior_id).name + "に残業申請中" %><br>
+                <% elsif day.overwork_enum == '承認' %>
+                  <%= User.find_by(id: day.overwork_superior_id).name + "より残業承認済" %><br>
+                <% elsif day.overwork_enum == '否認' %>
+                  <%= User.find_by(id: day.overwork_superior_id).name + "より残業否認" %><br>
+                <% end %>
+              <% end %>
               <%= User.find_by(id: day.change_superior_id).name + "に勤怠編集申請中" if day.change_superior_id.present?  %></td>
         </tr>
       <% end %>
@@ -125,13 +169,15 @@
         <td colspan = "5"></td>
         <td>
           <%= form_with(model: @dates.first, url: update_month_request_user_attendance_path(@user, @dates.first, params:{date: @first_day}), method: :patch) do |f| %>
-          <% if @dates.first.month_superior_id == nil%>
-          所属長承認　未
-          <% else %>
-          <%= User.find(@dates.first.month_superior_id).name %>に承認申請中
-          <% end %>
-          <br><%= f.collection_select :month_superior_id, User.where(["admin = ? or superior = ?", true, true]), :id, :name, :include_blank => true, selected: :include_blank %><br>
-          <%= f.submit "申請", class: "btn btn-primary" %>
+            <% if @dates.first.month_superior_id == nil%>
+              所属長承認　未
+            <% else %>
+              <%= User.find(@dates.first.month_superior_id).name %>に承認申請中
+            <% end %>
+            <% if @current_user == @user %>
+              <br><%= f.collection_select :month_superior_id, User.where(["admin = ? or superior = ?", true, true]), :id, :name, :include_blank => true, selected: :include_blank %><br>
+              <%= f.submit "申請", class: "btn btn-primary" %>
+            <% end %>
           <% end %>
         </td>
       </tr>

@@ -30,15 +30,15 @@ class AttendancesController < ApplicationController
         attendance = Attendance.find(id)
         if item[:change_superior_id].present?
           @after_start_time = item[:after_started_at].split(":")
-          @after_started_at = DateTime.new(attendance.started_at.year, 
-                                           attendance.started_at.month,
-                                           attendance.started_at.day,
+          @after_started_at = DateTime.new(attendance.worked_on.year, 
+                                           attendance.worked_on.month,
+                                           attendance.worked_on.day,
                                            @after_start_time[0].to_i,
                                            @after_start_time[1].to_i)
           @after_finish_time = item[:after_finished_at].split(":")
-          @after_finished_at = DateTime.new(attendance.finished_at.year, 
-                                           attendance.finished_at.month,
-                                           attendance.finished_at.day,
+          @after_finished_at = DateTime.new(attendance.worked_on.year, 
+                                           attendance.worked_on.month,
+                                           attendance.worked_on.day,
                                            @after_finish_time[0].to_i,
                                            @after_finish_time[1].to_i)
           if item[:change_tomorrow] == "true"
@@ -100,11 +100,11 @@ class AttendancesController < ApplicationController
       
 
       def attendances_params
-        params.permit(attendances: [:started_at, :finished_at, :note, :change_tomorrow, :change_superior_id, :after_started_at, :after_finished_at])[:attendances]
+        params.permit(attendances: [:started_at, :finished_at, :note, :change_tomorrow, :change_superior_id, :after_started_at, :after_finished_at,:change_enum])[:attendances]
       end
       
       def overwork_params
-        params.require(:attendance).permit(:overwork_time, :overwork_note, :overwork_tomorrow, :overwork_superior_id)
+        params.require(:attendance).permit(:overwork_time, :overwork_note, :overwork_tomorrow, :overwork_superior_id, :overwork_enum)
       end
       
       

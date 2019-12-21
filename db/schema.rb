@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191125123441) do
+ActiveRecord::Schema.define(version: 20191217125323) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20191125123441) do
     t.boolean "overwork_request_change", default: false
     t.datetime "after_started_at"
     t.datetime "after_finished_at"
+    t.integer "change_enum"
+    t.boolean "change_request_change", default: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 

@@ -40,21 +40,21 @@
                 <tbody> 
                   <% @attendances.each do |at| %>
                     <% if at.user_id == user.id %>
-                      <%= fields_for at do |af| %>
+                      <%= fields_for "attendances[]", at do |af| %>
                         <tr>
                           <td><%= at.worked_on.to_s(:date) %></td>
                           <td><%= %w{日 月 火 水 木 金 土}[at.worked_on.wday] %></td>
-                          <td><%= at.overwork_time.to_s(:time)  if at.overwork_time.present? %></td>
-                          <td><%= format_basic_work_time(user.designated_work_end_time) %></td>
-                          <td><%= overwork_times(user.designated_work_end_time, at.overwork_time, at.overwork_tomorrow) if at.overwork_time.present? %></td>
-                          <td><%= at.overwork_note %></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
+                          <td><%= at.started_at.to_s(:hour)  if at.started_at.present? %></td>
+                          <td><%= at.started_at.to_s(:min)  if at.started_at.present? %></td>
+                          <td><%= at.finished_at.to_s(:hour)  if at.finished_at.present? %></td>
+                          <td><%= at.finished_at.to_s(:min)  if at.finished_at.present? %></td>
+                          <td><%= at.after_started_at.to_s(:hour)  if at.after_started_at.present? %></td>
+                          <td><%= at.after_started_at.to_s(:min)  if at.after_started_at.present? %></td>
+                          <td><%= at.after_finished_at.to_s(:hour)  if at.after_finished_at.present? %></td>
+                          <td><%= at.after_finished_at.to_s(:min)  if at.after_finished_at.present? %></td>
                           <td><%= at.note %></td>
-                          <td><%= af.select :overwork_enum, Attendance.overwork_enums.keys, { include_blank: true } %></td>
-                          <td><%= af.check_box :overwork_request_change ,{}, "true", "false" %></td>
+                          <td><%= af.select :change_enum, Attendance.overwork_enums.keys %></td>
+                          <td><%= af.check_box :change_request_change ,{:checked => false}, "true", "false" %></td>
                           <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
                         </tr>
                       <% end %>

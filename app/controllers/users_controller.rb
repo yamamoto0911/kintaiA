@@ -40,6 +40,8 @@ class UsersController < ApplicationController
     @dates = user_attendances_month_date
     @worked_sum = @dates.where.not(started_at: nil).count
     @user.employee_number = @user.id
+    @over_approval_number = Attendance.where(overwork_superior_id: @user.id).where(overwork_enum: 1).size
+    @change_approval_number = Attendance.where(change_superior_id: @user.id).where(change_enum: 1).size
     respond_to do |format|
       format.html do
       end 
@@ -105,12 +107,30 @@ class UsersController < ApplicationController
   end
   
   def edit_overwork_request_approval
-    @attendances = Attendance.where(overwork_superior_id: current_user.id)
-    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id})
+    @attendances = Attendance.where(overwork_superior_id: current_user.id).where(overwork_enum: 1)
+    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id}).where(attendances: {overwork_enum: 1})
     @user = User.find(params[:id])
+    @first_day = first_day(params[:date])
   end
   
   def update_overwork_request_approval
+    @user = User.find(params[:id])
+    @array = []
+    @first_day = first_day(params[:date])
+    overwork_approval_params.each do |id, item|
+      attendance = Attendance.find(id)
+      if item[:overwork_request_change] == "true"
+        attendance.update_attributes(item)
+      end
+      @array.push(item[:overwork_request_change])
+    end
+    if @array.include?("true")
+      flash[:success] = '残業申請を処理しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    else
+      flash[:danger] = '残業申請処理に失敗しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    end
   end
   
   def edit_change_request_approval
@@ -126,10 +146,6 @@ class UsersController < ApplicationController
   
   private
     
-    def overwork_approval_params
-      params.require(:attendances).permit()
-    end
-    
     def basic_info_params
       params.require(:user).permit(:basic_work_time, :work_time)
     end
@@ -138,6 +154,10 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation, :basic_work_time, :work_time, :employee_number, :designated_work_start_time, :designated_work_end_time, :uid )
     end
 
+    def overwork_approval_params
+      params.permit(attendances: [:overwork_enum, :overwork_request_change])[:attendances]
+    end
+    
     # beforeアクション
 
     # ログイン済みユーザーか確認
@@ -164,7 +184,7 @@ class UsersController < ApplicationController
     end
     
     def ensure_correct_user
-      if current_user.id != params[:id].to_i && !current_user.admin?
+      if current_user.id != params[:id].to_i && !current_user.admin? && !current_user.superior?
         flash[:danger] = "そのアクセスはできません。"
         redirect_to current_user
       end

@@ -5,7 +5,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button><br><br>
-          <%= form_with(model: @users, url: update_overwork_request_approval_user_url, method: :patch) do |f| %>
+          <%= form_with(model: @users, url: update_overwork_request_approval_user_url(params:{date: @first_day}), method: :patch) do |f| %>
             <% @users.each do |user| %>
               <h4 class="modal-title" id="exampleModalLabel" align="center">【<%= user.name %>からの残業申請】</h4><br>
               <table class = "table-bordered table-condensed">
@@ -25,7 +25,7 @@
                 <tbody> 
                   <% @attendances.each do |at| %>
                     <% if at.user_id == user.id %>
-                      <%= fields_for at do |af| %>
+                      <%= fields_for "attendances[]", at do |af| %>
                         <tr>
                           <td><%= at.worked_on.to_s(:date) %></td>
                           <td><%= %w{日 月 火 水 木 金 土}[at.worked_on.wday] %></td>
@@ -33,8 +33,8 @@
                           <td><%= format_basic_work_time(user.designated_work_end_time) %></td>
                           <td><%= overwork_times(user.designated_work_end_time, at.overwork_time, at.overwork_tomorrow) if at.overwork_time.present? %></td>
                           <td><%= at.overwork_note %></td>
-                          <td><%= af.select :overwork_enum, Attendance.overwork_enums.keys, { include_blank: true } %></td>
-                          <td><%= af.check_box :overwork_request_change ,{}, "true", "false" %></td>
+                          <td><%= af.select :overwork_enum, Attendance.overwork_enums.keys %></td>
+                          <td><%= af.check_box :overwork_request_change ,{:checked => false}, "true", "false" %></td>
                           <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
                         </tr>
                       <% end %>
