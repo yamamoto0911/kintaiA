@@ -95,7 +95,7 @@ class AttendancesController < ApplicationController
     private
     
       def month_request_params
-        params.require(:attendance).permit(:month_superior_id)
+        params.require(:attendance).permit(:month_superior_id, :month_enum)
       end
       
 

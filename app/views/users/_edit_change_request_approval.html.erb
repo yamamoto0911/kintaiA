@@ -5,7 +5,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button><br><br>
-          <%= form_with(model: @users, url: update_change_request_approval_user_url, method: :patch) do |f| %>
+          <%= form_with(model: @users, url: update_change_request_approval_user_url(params:{date: @first_day}), method: :patch) do |f| %>
             <% @users.each do |user| %>
               <h4 class="modal-title" id="exampleModalLabel" align="center">【<%= user.name %>からの勤怠変更申請】</h4><br>
               <table class = "table-bordered table-condensed">
@@ -53,7 +53,7 @@
                           <td><%= at.after_finished_at.to_s(:hour)  if at.after_finished_at.present? %></td>
                           <td><%= at.after_finished_at.to_s(:min)  if at.after_finished_at.present? %></td>
                           <td><%= at.note %></td>
-                          <td><%= af.select :change_enum, Attendance.overwork_enums.keys %></td>
+                          <td><%= af.select :change_enum, Attendance.change_enums.keys %></td>
                           <td><%= af.check_box :change_request_change ,{:checked => false}, "true", "false" %></td>
                           <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
                         </tr>

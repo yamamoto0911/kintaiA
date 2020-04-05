@@ -6,6 +6,7 @@ class Attendance < ApplicationRecord
   
   enum overwork_enum: { "なし" => 0, "申請中" => 1, "承認" => 2, "否認" => 3 }, _prefix: true
   enum change_enum: { "なし" => 0, "申請中" => 1, "承認" => 2, "否認" => 3 }, _prefix: true
+  enum month_enum: { "なし" => 0, "申請中" => 1, "承認" => 2, "否認" => 3 }, _prefix: true
 
   def finished_at_edit_valid
     if started_at.nil? && finished_at.present?

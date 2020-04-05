@@ -1,0 +1,41 @@
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-group field">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button><br><br>
+          <%= form_with(model: @users, url: update_month_request_approval_user_url(params:{date: @first_day}), method: :patch) do |f| %>
+            <% @users.each do |user| %>
+              <h4 class="modal-title" id="exampleModalLabel" align="center">【<%= user.name %>からの１ヶ月分勤怠申請】</h4><br>
+              <table class = "table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th rowspan = "3">月</th>
+                    <th rowspan = "3">指示者確認㊞</th>
+                    <th rowspan = "3">変更</th>
+                    <th rowspan = "3">勤怠を確認する</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <% @attendances.each do |at| %>
+                    <% if at.user_id == user.id %>
+                      <%= fields_for "attendances[]", at do |af| %>
+                        <tr>
+                          <td><%= at.worked_on.to_s(:month) %></td>
+                          <td><%= af.select :month_enum, Attendance.month_enums.keys %></td>
+                          <td><%= af.check_box :month_request_change ,{:checked => false}, "true", "false" %></td>
+                          <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
+                        </tr>
+                      <% end %>
+                    <% end  %>  
+                  <% end %>  
+                </tbody>
+              </table><br>
+            <% end %>
+            <%= f.submit "変更を送信する", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+  </div>
+</div>

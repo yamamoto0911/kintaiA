@@ -3,3 +3,4 @@ Date::DATE_FORMATS[:year_month] = '%Y年%-m月'
 Time::DATE_FORMATS[:hour] = "%H"
 Time::DATE_FORMATS[:min] = "%M"
 Time::DATE_FORMATS[:time] = '%H:%M'
+Date::DATE_FORMATS[:month] = '%-m月'

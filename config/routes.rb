@@ -22,7 +22,9 @@ Rails.application.routes.draw do
       patch 'update_overwork_request_approval'
       get 'edit_change_request_approval'
       patch 'update_change_request_approval'
-      
+      get 'edit_month_request_approval'
+      patch 'update_month_request_approval'
+      get 'working_log'
     end
     resources :attendances do
       member do

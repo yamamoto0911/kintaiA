@@ -42,6 +42,7 @@ class UsersController < ApplicationController
     @user.employee_number = @user.id
     @over_approval_number = Attendance.where(overwork_superior_id: @user.id).where(overwork_enum: 1).size
     @change_approval_number = Attendance.where(change_superior_id: @user.id).where(change_enum: 1).size
+    @month_approval_number = Attendance.where(month_superior_id: @user.id).where(month_enum: 1).size
     respond_to do |format|
       format.html do
       end 
@@ -134,15 +135,64 @@ class UsersController < ApplicationController
   end
   
   def edit_change_request_approval
-    @attendances = Attendance.where(change_superior_id: current_user.id)
-    @users = User.joins(:attendances).group(:name).where(attendances: {change_superior_id: current_user.id})
+    @attendances = Attendance.where(change_superior_id: current_user.id).where(change_enum: 1)
+    @users = User.joins(:attendances).group(:name).where(attendances: {change_superior_id: current_user.id}).where(attendances: {change_enum: 1})
     @user = User.find(params[:id])
   end
   
   def update_change_request_approval
+    @user = User.find(params[:id])
+    @array = []
+    @first_day = first_day(params[:date])
+    change_approval_params.each do |id, item|
+      attendance = Attendance.find(id)
+      if item[:change_request_change] == "true"
+        attendance.update_attributes(item)
+      end
+      @array.push(item[:change_request_change])
+    end
+    if @array.include?("true")
+      flash[:success] = '勤怠変更申請を処理しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    else
+      flash[:danger] = '勤怠変更申請処理に失敗しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    end
   end
   
+  def edit_month_request_approval
+    @attendances = Attendance.where(month_superior_id: current_user.id).where(month_enum: 1)
+    @users = User.joins(:attendances).group(:name).where(attendances: {month_superior_id: current_user.id}).where(attendances: {month_enum: 1})
+    @user = User.find(params[:id])
+  end
   
+  def update_month_request_approval
+    @user = User.find(params[:id])
+    @array = []
+    @first_day = first_day(params[:date])
+    month_approval_params.each do |id, item|
+      attendance = Attendance.find(id)
+      if item[:month_request_change] == "true"
+        attendance.update_attributes(item)
+      end
+      @array.push(item[:month_request_change])
+    end
+    if @array.include?("true")
+      flash[:success] = '1ヶ月分勤怠申請を処理しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    else
+      flash[:danger] = '1ヶ月分勤怠申請処理に失敗しました。'
+      redirect_to user_url(@user, params:{first_day: @first_day})
+    end
+  end
+  
+  def working_log
+    @user = User.find(params[:id])
+    @first_day = first_day(params[:first_day])
+    @last_day = @first_day.end_of_month
+    @records = Attendance.where(overwork_superior_id: current_user.id).where(overwork_enum: 1)
+    
+  end
   
   private
     
@@ -156,6 +206,14 @@ class UsersController < ApplicationController
 
     def overwork_approval_params
       params.permit(attendances: [:overwork_enum, :overwork_request_change])[:attendances]
+    end
+    
+    def change_approval_params
+      params.permit(attendances: [:change_enum, :change_request_change])[:attendances]
+    end
+    
+    def month_approval_params
+      params.permit(attendances: [:month_enum, :month_request_change])[:attendances]
     end
     
     # beforeアクション
