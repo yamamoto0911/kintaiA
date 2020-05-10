@@ -54,6 +54,7 @@
                           <td><%= at.after_finished_at.to_s(:min)  if at.after_finished_at.present? %></td>
                           <td><%= at.note %></td>
                           <td><%= af.select :change_enum, Attendance.change_enums.keys %></td>
+                          <%= af.hidden_field :change_approval_date, value: Date.today %>
                           <td><%= af.check_box :change_request_change ,{:checked => false}, "true", "false" %></td>
                           <td><%= link_to "確認", user_path(id: user.id,first_day: at.worked_on.beginning_of_month), class: "btn btn-primary" %></td>
                         </tr>

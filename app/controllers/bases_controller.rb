@@ -1,5 +1,5 @@
 class BasesController < ApplicationController
-before_action :admin_user, only: :destroy
+before_action :admin_user
 
   def index
     @bases = Base.all
@@ -52,6 +52,6 @@ before_action :admin_user, only: :destroy
     end
     
     def admin_user
-      redirect_to bases_url unless current_user.admin?
+      redirect_to current_user unless current_user.admin?
     end
 end

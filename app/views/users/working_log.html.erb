@@ -17,12 +17,17 @@
       </tr>
     </thead>
     <tbody>
-      <td><%= @last_day %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <% @records.each do |record| %>
+        <tr>
+          <td><%= record.worked_on %></td>
+          <td><%= record.started_at.to_s(:time) %></td>
+          <td><%= record.finished_at.to_s(:time) %></td>
+          <td><%= record.after_started_at.to_s(:time) %></td>
+          <td><%= record.after_finished_at.to_s(:time) %></td>
+          <td><%= superior_user_name(record.change_superior_id) %></td>
+          <td><%= record.change_approval_date %></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>

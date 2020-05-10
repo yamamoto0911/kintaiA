@@ -200,7 +200,7 @@
               <% end %>
             <% end %>
             <% if @current_user == @user %>
-              <br><%= f.collection_select :month_superior_id, User.where(["admin = ? or superior = ?", true, true]), :id, :name, :include_blank => true, selected: :include_blank %><br>
+              <br><%= f.collection_select :month_superior_id, User.where(["superior = ?", true]), :id, :name, :include_blank => true, selected: :include_blank %><br>
               <%= f.hidden_field :month_enum, {value: '申請中'} %>
               <%= f.submit "申請", class: "btn btn-primary" %>
             <% end %>

@@ -1,31 +1,30 @@
 User.create!(name:  "管理者",
-             email: "yamamoto@gmail.com",
-             password:              "yamamoto",
-             password_confirmation: "yamamoto",
+             email: "admin@email.com",
+             password:              "password",
+             password_confirmation: "password",
              admin: true)
 
-User.create!(name:  "上司１",
-             email: "yamamoto1@gmail.com",
-             password:              "yamamoto",
-             password_confirmation: "yamamoto",
+User.create!(name:  "上長１",
+             email: "superior1@email.com",
+             password:              "password",
+             password_confirmation: "password",
              superior: true)
              
-User.create!(name:  "上司２",
-             email: "yamamoto2@gmail.com",
-             password:              "yamamoto",
-             password_confirmation: "yamamoto",
+User.create!(name:  "上長２",
+             email: "superior2@email.com",
+             password:              "password",
+             password_confirmation: "password",
              superior: true)
-             
 
-4.times do |n|
-  name  = Faker::Name.name
-  email = "email#{n+1}@sample.com"
-  password = "password"
-  User.create!(name:  name,
-               email: email,
-               password:              password,
-               password_confirmation: password)
-end
+User.create!(name:  "一般１",
+             email: "user1@email.com",
+             password:              "password",
+             password_confirmation: "password")
+             
+User.create!(name:  "一般２",
+             email: "user2@email.com",
+             password:              "password",
+             password_confirmation: "password")
 
 Base.create!(name: "東京",
              number: 1,

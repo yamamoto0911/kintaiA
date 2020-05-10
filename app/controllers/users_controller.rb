@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
+  before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info, :index, :attendance_users]
   before_action :ensure_correct_user, only: [:show]
   
   def index
@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    redirect_to root_path if current_user.admin? && @user.admin?
     @first_day = first_day(params[:first_day])
     @last_day = @first_day.end_of_month
     (@first_day..@last_day).each do |day|
@@ -190,8 +191,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @first_day = first_day(params[:first_day])
     @last_day = @first_day.end_of_month
-    @records = Attendance.where(overwork_superior_id: current_user.id).where(overwork_enum: 1)
-    
+    @records = Attendance.where(user_id: @user.id).where(change_enum: 2).where(worked_on: (@first_day)..(@last_day))
   end
   
   private
@@ -209,7 +209,7 @@ class UsersController < ApplicationController
     end
     
     def change_approval_params
-      params.permit(attendances: [:change_enum, :change_request_change])[:attendances]
+      params.permit(attendances: [:change_enum, :change_request_change, :change_approval_date])[:attendances]
     end
     
     def month_approval_params
@@ -234,11 +234,11 @@ class UsersController < ApplicationController
     end
     
     def admin_user
-      redirect_to(root_url) unless current_user.admin?
+      redirect_to(current_user) unless current_user.admin?
     end
     
     def superior_user
-      redirect_to(root_url) unless current_user.superior?
+      redirect_to(current_user) unless current_user.superior?
     end
     
     def ensure_correct_user
@@ -247,6 +247,4 @@ class UsersController < ApplicationController
         redirect_to current_user
       end
     end
-
-    
 end
