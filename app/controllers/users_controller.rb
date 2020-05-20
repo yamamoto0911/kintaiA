@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :ensure_correct_user, only: [:show]
   
   def index
-    @users = User.paginate(page: params[:page]).search(params[:search])
+    @users = User.where.not(admin: true).paginate(page: params[:page]).search(params[:search])
   end
   
   def import
