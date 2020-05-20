@@ -110,7 +110,7 @@ class UsersController < ApplicationController
   
   def edit_overwork_request_approval
     @attendances = Attendance.where(overwork_superior_id: current_user.id).where(overwork_enum: 1)
-    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id}).where(attendances: {overwork_enum: 1})
+    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id}).where(attendances: {overwork_enum: 1}).order(nil)
     @user = User.find(params[:id])
     @first_day = first_day(params[:date])
   end
