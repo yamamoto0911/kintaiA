@@ -110,7 +110,7 @@ class UsersController < ApplicationController
   
   def edit_overwork_request_approval
     @attendances = Attendance.where(overwork_superior_id: current_user.id).where(overwork_enum: 1)
-    @users = User.joins(:attendances).group(:name).where(attendances: {overwork_superior_id: current_user.id}).where(attendances: {overwork_enum: 1}).order(nil)
+    @users = User.joins(:attendances).group(:id).where(attendances: {overwork_superior_id: current_user.id}).where(attendances: {overwork_enum: 1})
     @user = User.find(params[:id])
     @first_day = first_day(params[:date])
   end
@@ -137,7 +137,7 @@ class UsersController < ApplicationController
   
   def edit_change_request_approval
     @attendances = Attendance.where(change_superior_id: current_user.id).where(change_enum: 1)
-    @users = User.joins(:attendances).group(:name).where(attendances: {change_superior_id: current_user.id}).where(attendances: {change_enum: 1})
+    @users = User.joins(:attendances).group(:id).where(attendances: {change_superior_id: current_user.id}).where(attendances: {change_enum: 1})
     @user = User.find(params[:id])
   end
   
@@ -163,7 +163,7 @@ class UsersController < ApplicationController
   
   def edit_month_request_approval
     @attendances = Attendance.where(month_superior_id: current_user.id).where(month_enum: 1)
-    @users = User.joins(:attendances).group(:name).where(attendances: {month_superior_id: current_user.id}).where(attendances: {month_enum: 1})
+    @users = User.joins(:attendances).group(:id).where(attendances: {month_superior_id: current_user.id}).where(attendances: {month_enum: 1})
     @user = User.find(params[:id])
   end
   
