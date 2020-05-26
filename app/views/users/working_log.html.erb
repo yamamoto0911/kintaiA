@@ -20,10 +20,26 @@
       <% @records.each do |record| %>
         <tr>
           <td><%= record.worked_on %></td>
-          <td><%= record.started_at.to_s(:time) %></td>
-          <td><%= record.finished_at.to_s(:time) %></td>
-          <td><%= record.after_started_at.to_s(:time) %></td>
-          <td><%= record.after_finished_at.to_s(:time) %></td>
+          <% if record.started_at.present? %>
+            <td><%= record.started_at.to_s(:time) %></td>
+          <% else %>
+            <td><%= record.started_at.to_s %></td>
+          <% end %>
+          <% if record.finished_at.present? %>
+            <td><%= record.finished_at.to_s(:time) %></td>
+          <% else %>
+            <td><%= record.finished_at.to_s %></td>
+          <% end %>
+          <% if record.after_started_at.present? %>
+            <td><%= record.after_started_at.to_s(:time) %></td>
+          <% else %>
+            <td><%= record.after_started_at.to_s %></td>
+          <% end %>
+          <% if record.after_finished_at.present? %>
+            <td><%= record.after_finished_at.to_s(:time) %></td>
+          <% else %>
+            <td><%= record.after_finished_at.to_s %></td>
+          <% end %>
           <td><%= superior_user_name(record.change_superior_id) %></td>
           <td><%= record.change_approval_date %></td>
         </tr>
